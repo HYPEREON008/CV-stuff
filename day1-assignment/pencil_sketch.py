@@ -123,7 +123,7 @@ top.pack(pady = 10)
 ttk.Button(top, text="Select Image", command = select_image).grid(row=0, column=0, padx=10)
 ttk.Label(top, text="Kernel Size for Blur:").grid(row=0, column=1, padx=10)
 
-kernel_slider = tk.Scale(top, from_=1, to=101, orient="horizontal", resolution=2)
+kernel_slider = tk.Scale(top, from_=3, to=101, orient="horizontal", resolution=2)
 kernel_slider.set(21)
 kernel_slider.grid(row=0, column=2, padx=10)
 
