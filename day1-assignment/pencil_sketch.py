@@ -9,15 +9,26 @@ def pencil_sketch(img_path, blur_ksize=21):
     img = cv2.imread(img_path)
     if img is None:
         raise FileNotFoundError(f"Image not found at path: {img_path}")
+    #kernel size should be odd and greater than 1
+    #no need to check here as user will provide correct value from the slider
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) #convert color of image from BGR to GRAY
     img_invert = cv2.bitwise_not(img_gray) #invert the gray image
     img_smooth = cv2.GaussianBlur(img_invert, (blur_ksize, blur_ksize), 0) #cv2.GaussianBlur(src, ksize, sigmaX) sigmaX is standard deviation in X direction, here 0 means calculated from kernel size
 
     #now invert the blurred image
     img_smooth_invert = cv2.bitwise_not(img_smooth)
-    #create the pencil sketch image
-    img_pencil_sketch = cv2.divide(img_gray, img_smooth_invert, scale=256)
-    return (img, img_pencil_sketch)
+    #create the pencil sketch image:
+    img_pencil_sketch = cv2.divide(img_gray, img_smooth_invert, scale = 256)
+    if not color_mode.get():
+        return img, img_pencil_sketch
+    
+    #create color pencil sketch
+    img_color_pencil_sketch = cv2.bitwise_and(img, img, mask=cv2.bitwise_not(img_pencil_sketch))
+    threshold = 10  # adjust
+    mask = cv2.inRange(img_color_pencil_sketch, (0, 0, 0), (threshold, threshold, threshold))
+    img_color_pencil_sketch[mask > 0] = (255, 255, 255)
+
+    return (img, img_color_pencil_sketch)
 
 
 def display_img(original, sketch, save_path=None):
