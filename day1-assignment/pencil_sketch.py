@@ -24,7 +24,7 @@ def pencil_sketch(img_path, blur_ksize=21):
     
     #create color pencil sketch
     img_color_pencil_sketch = cv2.bitwise_and(img, img, mask=cv2.bitwise_not(img_pencil_sketch))
-    threshold = 10  # adjust
+    threshold = 1  # adjust
     mask = cv2.inRange(img_color_pencil_sketch, (0, 0, 0), (threshold, threshold, threshold))
     img_color_pencil_sketch[mask > 0] = (255, 255, 255)
 
@@ -49,16 +49,14 @@ def display_img(original, sketch, save_path=None):
 
 
 def main():
-    try:
-        img_path = input("Enter the path of the image: ")
-        if img_path == "":
-            raise FileNotFoundError()
-    except (EOFError, FileNotFoundError):
-        print("Invalid input. Using default image path.")
-        img_path = os.path.join(input_dir, 'sample_image1.jpeg')  #default image path
+    img_path = input("Enter the file name of the image: ").strip()
+    if not img_path:
+        img_path = 'sample_image1.jpeg'
         
+    img_path = os.path.join(input_dir, img_path)
+    print(f"Processing image: {img_path}")
     original, sketch = pencil_sketch(img_path)
-    display_img(original, sketch, save_path = os.path.join(output_dir, 'pencil_sketch_'+ os.path.basename(img_path)))
+    display_img(original, sketch, save_path = os.path.join(output_dir, 'color_'*color_mode+'pencil_sketch_'+ os.path.basename(img_path)))
 
 def cv_to_tk(img):
     if len(img.shape) == 2:
@@ -113,11 +111,11 @@ root.geometry("900x520")
 root.resizable(False, False)
 
 # Main container
-main = ttk.Frame(root, padding=15)
-main.pack(fill="both", expand=True)
+Main = ttk.Frame(root, padding=15)
+Main.pack(fill="both", expand=True)
 
 # Top control frame
-top = ttk.Frame(main)
+top = ttk.Frame(Main)
 top.pack(pady = 10)
 
 ttk.Button(top, text="Select Image", command = select_image).grid(row=0, column=0, padx=10)
@@ -131,21 +129,21 @@ ttk.Button(top, text="Convert", command = convert_image).grid(row=0, column=3, p
 ttk.Checkbutton(top, text="Color Sketch", variable = color_mode).grid(row=0, column=4, padx=10)
 
 # Image display frame
-img_frame = ttk.Frame(main)
+img_frame = ttk.Frame(Main)
 img_frame.pack(pady=10)
 
 default_original_img = tk.PhotoImage(height=360, width=360)  # Placeholder for original image
 default_sketch_img = tk.PhotoImage(height=360, width=360)  # Placeholder for sketch image
 
 left_img_label = tk.Label(img_frame, text="Original Image", background="lightgray", compound="top", image=default_original_img)
-left_img_label.grid(row=0, column=0, padx=10)
+left_img_label.grid(row=1, column=0, padx=10)
 
 right_img_label = tk.Label(img_frame, text="Pencil Sketch", background="lightgray", compound="top", image=default_sketch_img)
-right_img_label.grid(row=0, column=1, padx=10)
+right_img_label.grid(row=1, column=1, padx=10)
 
 root.mainloop()
 
 if __name__ == "__main__":
     ## CLI verison
-    #main()
+    # main()
     pass
