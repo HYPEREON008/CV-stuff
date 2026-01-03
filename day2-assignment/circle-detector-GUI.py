@@ -9,6 +9,7 @@ import circle_detector as cd ## import the circle detector program
 input_dir = 'test-images'
 output_dir = 'results'
 
+
 def cv_to_tk(img):
     if len(img.shape) == 2:
         img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
@@ -41,7 +42,7 @@ def action():
     if not img_path:
         return
     _, preprocessed_img = cd.preprocess_image(img_path)
-    circles = cd.detect_circles(preprocessed_img, param1=param1_slider.get(), param2=param2_slider.get())
+    circles = cd.detect_circles(preprocessed_img, param1=param1_slider.get(), param2=param2_slider.get(), auto_params=auto_params.get())
 
     right_img = cv_to_tk(cd.visualize_circles(cv2.imread(img_path), circles))
 
@@ -55,6 +56,8 @@ img_path = None
 root = tk.Tk()
 color_mode = tk.BooleanVar(value=False)
 root.title("Circle Detector")
+
+auto_params = tk.BooleanVar(value=False)
 
 root.geometry("900x520")
 root.resizable(False, False)
@@ -71,16 +74,18 @@ ttk.Button(top, text="Select Image", command = select_image).grid(row=0, column=
 ttk.Label(top, text="Param 1").grid(row=0, column=1, padx=10)
 ttk.Label(top, text="Param 2").grid(row=0, column=2, padx=10)
 
-param1_slider = tk.Scale(top, from_=3, to=101, orient="horizontal", resolution=1)
-param1_slider.set(21)
+param1_slider = tk.Scale(top, from_=50, to=250, orient="horizontal", resolution=1) ## param1 is high threshold for Canny edge detector
+param1_slider.set(100)
+
 param1_slider.grid(row=1, column=1, padx=10)
 
-param2_slider = tk.Scale(top, from_=3, to=101, orient="horizontal", resolution=1)
-param2_slider.set(21)
+param2_slider = tk.Scale(top, from_=1, to=100, orient="horizontal", resolution=1) ## param2 is accumulator threshold for circle centers
+param2_slider.set(30)
+
 param2_slider.grid(row=1, column=2, padx=10)
 
 ttk.Button(top, text="Detect", command = action).grid(row=0, column=3, padx=10)
-ttk.Checkbutton(top, text="Color Sketch", variable = color_mode).grid(row=0, column=4, padx=10)
+ttk.Checkbutton(top, text="Auto Params", variable = auto_params).grid(row=0, column=4, padx=10)
 
 # Image display frame
 img_frame = ttk.Frame(Main)
@@ -94,6 +99,7 @@ left_img_label.grid(row=1, column=0, padx=10)
 
 right_img_label = tk.Label(img_frame, text="Detected Circles", background="lightgray", compound="top", image=default_sketch_img)
 right_img_label.grid(row=1, column=1, padx=10)
+
 
 root.mainloop()
 

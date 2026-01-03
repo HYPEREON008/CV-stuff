@@ -16,3 +16,45 @@ min radius: 14.5
 max radius: 106.19999694824219
 # circles: 14
 
+Image: sample_image1.jpeg
+mean radius: 65.62222290039062
+min radius: 22.650001525878906
+max radius: 136.79998779296875
+# circles: 27
+
+Image: sample_image1.jpeg
+mean radius: 37.02857208251953
+min radius: 21.799999237060547
+max radius: 83.80000305175781
+# circles: 7
+
+Image: sample_image1.jpeg
+mean radius: 46.249996185302734
+min radius: 9.600000381469727
+max radius: 126.5
+# circles: 44
+
+Image: sample_image1.jpeg
+mean radius: 46.249996185302734
+min radius: 9.600000381469727
+max radius: 126.5
+# circles: 44
+
+Image: sample_image1.jpeg
+mean radius: 56.92181396484375
+min radius: 14.5
+max radius: 83.80000305175781
+# circles: 55
+
+Image: sample_image2.jpeg
+mean radius: 445.23944091796875
+min radius: 15.0
+max radius: 1644.199951171875
+# circles: 4169
+
+Image: sample_image2.jpeg
+mean radius: 68.08814239501953
+min radius: 11.800000190734863
+max radius: 215.8000030517578
+# circles: 118
+

@@ -32,7 +32,13 @@ def plot_image(img, output):
     
 
 # %%
-def detect_circles(gray, param1=100, param2=30):
+def detect_circles(gray, param1=100, param2=30, auto_params=False):
+    if auto_params:
+        ## automatically determine param1 and param2 based on image properties
+        mean_intensity = np.mean(gray)
+        param1 = int(max(50, min(200, mean_intensity)))
+        param2 = int(max(20, min(100, mean_intensity / 2)))
+        print(f"Auto parameters set: param1={param1}, param2={param2}")
     ## detect circles using HoughCircles\
     circles = cv2.HoughCircles(gray, 
                                cv2.HOUGH_GRADIENT, 
