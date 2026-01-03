@@ -1,0 +1,12 @@
+Image: sample_image1.jpeg
+mean radius: 32.29999923706055
+min radius: 21.799999237060547
+max radius: 63.20000076293945
+# circles: 4
+
+Image: sample_image1.jpeg
+mean radius: 32.29999923706055
+min radius: 21.799999237060547
+max radius: 63.20000076293945
+# circles: 4
+
