@@ -58,3 +58,15 @@ min radius: 11.800000190734863
 max radius: 215.8000030517578
 # circles: 118
 
+Image: sample_image1.jpeg
+mean radius: 22.100000381469727
+min radius: 22.100000381469727
+max radius: 22.100000381469727
+# circles: 1
+
+Image: sample_image1.jpeg
+mean radius: 37.02857208251953
+min radius: 21.799999237060547
+max radius: 83.80000305175781
+# circles: 7
+

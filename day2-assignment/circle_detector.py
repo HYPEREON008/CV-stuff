@@ -34,11 +34,22 @@ def plot_image(img, output):
 # %%
 def detect_circles(gray, param1=100, param2=30, auto_params=False):
     if auto_params:
-        ## automatically determine param1 and param2 based on image properties
-        mean_intensity = np.mean(gray)
-        param1 = int(max(50, min(200, mean_intensity)))
-        param2 = int(max(20, min(100, mean_intensity / 2)))
-        print(f"Auto parameters set: param1={param1}, param2={param2}")
+        edges = cv2.Canny(gray, 50, 150)
+        contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        circles = []
+        for c in contours:
+            area = cv2.contourArea(c)
+            peri = cv2.arcLength(c, True)
+            if peri == 0:
+                continue
+
+            circularity = 4*np.pi*area / (peri*peri)
+
+            if 0.7 < circularity < 1.2 and area > 300:
+                (x,y), r = cv2.minEnclosingCircle(c)
+                circles.append((int(x), int(y), int(r)))
+        return circles
     ## detect circles using HoughCircles\
     circles = cv2.HoughCircles(gray, 
                                cv2.HOUGH_GRADIENT, 
