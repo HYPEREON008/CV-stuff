@@ -42,7 +42,7 @@ def action():
     if not img_path:
         return
     _, preprocessed_img = cd.preprocess_image(img_path)
-    circles = cd.detect_circles(preprocessed_img, param1=param1_slider.get(), param2=param2_slider.get(), auto_params=auto_params.get())
+    circles = cd.detect_circles(preprocessed_img, param1=param1_slider.get(), param2=param2_slider.get(), auto_params=auto_params.get(), minDist=minDist.get(), minRadius=minRadius.get(), maxRadius=maxRadius.get())
 
     right_img = cv_to_tk(cd.visualize_circles(cv2.imread(img_path), circles))
 
@@ -58,6 +58,9 @@ color_mode = tk.BooleanVar(value=False)
 root.title("Circle Detector")
 
 auto_params = tk.BooleanVar(value=False)
+minDist   = tk.IntVar(value=20)
+minRadius = tk.IntVar(value=0)
+maxRadius = tk.IntVar(value=0)
 
 root.geometry("900x520")
 root.resizable(False, False)
@@ -84,8 +87,22 @@ param2_slider.set(30)
 
 param2_slider.grid(row=1, column=2, padx=10)
 
-ttk.Button(top, text="Detect", command = action).grid(row=0, column=3, padx=10)
-ttk.Checkbutton(top, text="Auto Params", variable = auto_params).grid(row=0, column=4, padx=10)
+
+
+ttk.Button(top, text="Detect", command = action).grid(row=0, column=6, padx=10)
+ttk.Checkbutton(top, text="Auto Params", variable = auto_params).grid(row=1, column=6, padx=10)
+
+# optional features of minDist, minRadius, maxRadius
+
+
+ttk.Label(top, text="minDist").grid(row=0, column=4, padx=10)
+ttk.Label(top, text="minRadius").grid(row=1, column=4, padx=10)
+ttk.Label(top, text="maxRadius").grid(row=2, column=4, padx=10)
+
+ttk.Entry(top, width=5, textvariable=minDist).grid(row=0, column=5, padx=10)
+ttk.Entry(top, width=5, textvariable=minRadius).grid(row=1, column=5, padx=10)
+ttk.Entry(top, width=5, textvariable=maxRadius).grid(row=2, column=5, padx=10)
+
 
 # Image display frame
 img_frame = ttk.Frame(Main)

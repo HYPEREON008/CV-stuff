@@ -32,7 +32,7 @@ def plot_image(img, output):
     
 
 # %%
-def detect_circles(gray, param1=100, param2=30, auto_params=False):
+def detect_circles(gray, param1=100, param2=30, auto_params=False, minDist=20, minRadius=0, maxRadius=0):
     if auto_params:
         edges = cv2.Canny(gray, 50, 150)
         contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -46,7 +46,7 @@ def detect_circles(gray, param1=100, param2=30, auto_params=False):
 
             circularity = 4*np.pi*area / (peri*peri)
 
-            if 0.7 < circularity < 1.2 and area > 300:
+            if 0.6 < circularity < 1.4 and area > 300:
                 (x,y), r = cv2.minEnclosingCircle(c)
                 circles.append((int(x), int(y), int(r)))
         return circles
@@ -54,11 +54,11 @@ def detect_circles(gray, param1=100, param2=30, auto_params=False):
     circles = cv2.HoughCircles(gray, 
                                cv2.HOUGH_GRADIENT, 
                                dp=1, 
-                               minDist=20,
+                               minDist=minDist,
                                param1=param1,
                                param2=param2,
-                               minRadius=0,
-                               maxRadius=0)
+                               minRadius=minRadius,
+                               maxRadius=maxRadius)
     return circles[0] if circles is not None else []
 
 
