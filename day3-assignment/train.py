@@ -15,6 +15,9 @@
 # !unzip microsoft-catsvsdogs-dataset.zip
 # !ls
 
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -22,7 +25,7 @@ from torchvision import datasets, transforms, models
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import UnidentifiedImageError
+from PIL import Image, UnidentifiedImageError
 
 # Data Augmentation for Training
 # Compose means apply these transforms in order one after the other
@@ -80,9 +83,6 @@ val_transforms = transforms.Compose([
 # split_class("Cat")
 # split_class("Dog")
 
-import os
-from PIL import Image
-
 # Custom loader to handle UnidentifiedImageError
 def custom_pil_loader(path):
     try:
@@ -97,21 +97,17 @@ def custom_pil_loader(path):
         return Image.new('RGB', (224, 224), (0, 0, 0))
 
 
-os.chdir("C:\\Users\\SANMITRA\\The Multiverse\\Programming Stuff\\jupyter NB\\CV basics\\data")
+base_dir = "C:\\Users\\SANMITRA\\The Multiverse\\Programming Stuff\\jupyter NB\\CV basics\\data\\data"
 # Load Datasets
-train_data = datasets.ImageFolder('data/train', transform=train_transforms, loader=custom_pil_loader)
-test_data = datasets.ImageFolder('data/test', transform=val_transforms, loader=custom_pil_loader)
-val_data = datasets.ImageFolder('data/val', transform=val_transforms, loader=custom_pil_loader)
+train_data = datasets.ImageFolder(os.path.join(base_dir, 'train'), transform=train_transforms, loader=custom_pil_loader)
+val_data = datasets.ImageFolder(os.path.join(base_dir, 'val'), transform=val_transforms, loader=custom_pil_loader)
 
 # Create Data Loaders
 train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_data, batch_size=32, shuffle=False)
 
-test_loader = DataLoader(test_data, batch_size=32, shuffle=False)
-
 print(f"Train data size: {len(train_data)}")
 print(f"Validation data size: {len(val_data)}")
-print(f"Test data size: {len(test_data)}")
 
 # Load pretrained ResNet18
 model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
@@ -168,7 +164,6 @@ for epoch in range(n_epochs):
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
-        print(total)
 
     train_loss = running_losses/len(train_loader)
     train_accuracy = 100*correct/total
@@ -209,4 +204,9 @@ for epoch in range(n_epochs):
     print(f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.2f}%")
     print(f"Val Loss: {val_loss:.4f}, Val Accuracy: {val_accuracy:.2f}%")
     print()
+
+np.save("train_losses.npy", train_losses)
+np.save("val_losses.npy", val_losses)
+np.save("val_accuracies.npy", val_accuracies)
+np.save("train_accuracies.npy", train_accuracies)
 
